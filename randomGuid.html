@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Toolbox</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #121212;
+            color: #e0e0e0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topbar {
+            background: #1e1e1e;
+            border-bottom: 1px solid #333;
+            padding: 14px 30px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .topbar a {
+            color: #e0e0e0;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            background: #252525;
+            border: 1px solid #333;
+        }
+
+        .topbar img {
+            height: 36px;
+        }
+
+        .topbar a:hover {
+            background: #303f56;
+        }
+
+        .container {
+            width: 1400px;
+            max-width: 95vw;
+            margin: auto;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-weight: normal;
+        }
+
+        .columns {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .panel {
+            flex: 1;
+            min-width: 0;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 18px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .row-wrap {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input,
+        textarea {
+            background: #2b2b2b;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+        }
+
+        input {
+            width: 120px;
+        }
+
+        textarea {
+            flex: 1;
+            resize: none;
+            height: 60px;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        button {
+            border: none;
+            border-radius: 4px;
+            background: #2979ff;
+            color: white;
+            cursor: pointer;
+            padding: 10px 18px;
+            transition: background .15s;
+        }
+
+        button:hover {
+            background: #1565c0;
+        }
+
+        .history {
+            background: #252525;
+            border: 1px solid #333;
+            border-radius: 4px;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .history ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .history li {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .history li:last-child {
+            border-bottom: none;
+        }
+
+        .history li:hover {
+            background: #303f56;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #43a047;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity .2s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .history::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .history::-webkit-scrollbar-thumb {
+            background: #555;
+        }
+
+        .history::-webkit-scrollbar-track {
+            background: #252525;
+        }
+
+        @media (max-width: 900px) {
+            .columns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <img src="icon/android-chrome-192x192.png"/>
+        <a href="./messages.html">Messages examples</a>
+    </div>
+    <div class="container">
+        <h1>Developer Toolbox</h1>
+
+        <div class="columns">
+            <div class="panel">
+                <h2>GUID Generator</h2>
+
+                <div class="section">
+                    <button onclick="getGUID()">Generate GUID</button>
+                </div>
+
+                <div class="section row">
+                    <textarea id="guidOutput"></textarea>
+                    <button onclick="copyGUID()">Copy</button>
+                </div>
+
+                <div class="section">
+                    <b>History (click to copy)</b>
+
+                    <div class="history">
+                        <ul id="guidHistory"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>TAC Claims</h2>
+
+                <div class="section row-wrap">
+                    <button onclick="createTac('2010', 'DK')">🇩🇰 DK</button>
+                    <button onclick="createTac('2010', 'SE')">🇸🇪 SE</button>
+                </div>
+
+                <div class="section row">
+                    <input id="tacId" value="2010">
+                    <input id="tacCountry" value="DK">
+                    <button onclick="createTacManual()">Generate</button>
+                </div>
+
+                <div class="section row">
+                    <textarea id="tacOutput"></textarea>
+                    <button onclick="copyTac()">Copy</button>
+                </div>
+
+                <div class="section">
+                    <b>History (click to copy)</b>
+
+                    <div class="history">
+                        <ul id="tacHistory"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let toastTimeout;
+
+        function showToast(text) {
+            const toast = document.getElementById("toast");
+
+            toast.innerText = text;
+            toast.classList.add("show");
+
+            clearTimeout(toastTimeout);
+
+            toastTimeout = setTimeout(function () {
+                toast.classList.remove("show");
+            }, 1000);
+        }
+
+        function copy(text, msg) {
+            navigator.clipboard.writeText(text);
+            showToast(msg);
+        }
+
+        function addHistory(id, value) {
+            const li = document.createElement("li");
+
+            li.innerText = value;
+            li.onclick = function () {
+                copy(value, "Copied");
+            };
+
+            document.getElementById(id).prepend(li);
+        }
+
+        function getGUID() {
+            const guid = crypto.randomUUID();
+
+            document.getElementById("guidOutput").value = guid;
+
+            copy(guid, "GUID copied");
+            addHistory("guidHistory", guid);
+        }
+
+        function copyGUID() {
+            copy(document.getElementById("guidOutput").value, "GUID copied");
+        }
+
+        function base64url(str) {
+            return btoa(str)
+                .replace(/\+/g, "-")
+                .replace(/\//g, "_")
+                .replace(/=+$/g, "");
+        }
+
+        function createTac(id, country) {
+            const obj = {
+                "urn:sdc.dk:orgid": id,
+                "urn:sdc.dk:cnty": country,
+                "urn:sdc.dk:ldbid": id
+            };
+
+            const encoded = base64url(JSON.stringify(obj));
+
+            document.getElementById("tacId").value = id;
+            document.getElementById("tacCountry").value = country;
+            document.getElementById("tacOutput").value = encoded;
+
+            copy(encoded, "TAC copied");
+            addHistory("tacHistory", encoded);
+        }
+
+        function createTacManual() {
+            createTac(
+                document.getElementById("tacId").value,
+                document.getElementById("tacCountry").value.toUpperCase()
+            );
+        }
+
+        function copyTac() {
+            copy(document.getElementById("tacOutput").value, "TAC copied");
+        }
+    </script>
+</body>
+</html>
